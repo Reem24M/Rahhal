@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-export default function VerfiyEmail() {
+export default function VerifyEmail() {
   const navigate = useNavigate();
 
   return (

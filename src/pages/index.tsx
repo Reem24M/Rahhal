@@ -5,7 +5,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import ForgetPassword from './auth/ForgetPassword';
 import ResetPassword from './auth/ResetPssword'
-import VerfiyEmail from './auth/VerfiyEmail';
+import VerifyEmail from './auth/VerifyEmail';
 // Profile Pages
 import ProfilePage from './profile/profile';
 
@@ -38,7 +38,7 @@ const Pages = () => {
                     <Route path="/register" element={<Register />} />
                     <Route path="/forgot-password" element={<ForgetPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/verify-email" element={<VerfiyEmail />} />
+                    <Route path="/veirfy-email" element={<VerifyEmail />} />
                     </Route>
 
                 <Route element={<MainLayout />}>
