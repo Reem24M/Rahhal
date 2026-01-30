@@ -35,7 +35,7 @@ const Pages = () => {
                     <Route element={<AuthLayout />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgetPassword />} />
+                    <Route path="/forget-password" element={<ForgetPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
                     </Route>
 

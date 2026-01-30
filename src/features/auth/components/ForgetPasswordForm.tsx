@@ -36,7 +36,7 @@ export default function ForgotPassword() {
         <button
           type="button"
           onClick={() => navigate("/reset-password")}
-          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
+          className="w-full bg-primary-600 hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
         >
           Send Reset Link
         </button>

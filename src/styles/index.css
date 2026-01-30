@@ -1,28 +1,92 @@
-/* Tailwind v4 imports (REQUIRED ORDER) */
+
 @import "tailwindcss/preflight";
 @import "tailwindcss/theme";
 @import "tailwindcss/utilities";
 
-/* Global base styles */
+/* =========================================
+   Design Tokens (Theme)
+   Source of Truth
+========================================= */
+@theme {
+  /* ===== primary ===== */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* ===== Gray ===== */
+  --color-gray-0: #ffffff;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* ===== Radius ===== */
+  --radius-full: 9999px;
+}
+
+/* =========================================
+   Dark Mode Overrides
+========================================= */
+:root.dark-mode {
+  --color-gray-0: #0f172a;
+  --color-gray-50: #020617;
+  --color-gray-100: #020617;
+  --color-gray-200: #1e293b;
+  --color-gray-300: #334155;
+  --color-gray-400: #475569;
+  --color-gray-500: #64748b;
+  --color-gray-600: #cbd5e1;
+  --color-gray-700: #e5e7eb;
+  --color-gray-800: #f1f5f9;
+  --color-gray-900: #f8fafc;
+}
+
+/* =========================================
+   Global Base Styles
+========================================= */
 body {
   min-height: 100vh;
-  background-color: #ffffff;
-  color: #111827;
+  background-color: var(--color-gray-0);
+  color: var(--color-gray-900);
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Reusable input style */
+/* =========================================
+   Reusable Input Style
+========================================= */
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-gray-200);
   font-size: 0.875rem;
   outline: none;
+  background-color: var(--color-gray-0);
+  color: var(--color-gray-900);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: var(--color-gray-400);
 }
 
 .input:focus {
-  border-color: 28AEBD;
-  box-shadow: 0 0 0 2px rgba(47, 198, 203, 0.4);}
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-brand-500) 40%, transparent);
+}
