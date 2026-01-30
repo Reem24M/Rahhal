@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
-export default function Login() {
+export default function ForgotPassword() {
   return (
     <div>
       {/* Header */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-900">
-          Welcome Back
+          Forgot Password
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Log in to continue your journey.
+          Enter your email address to reset your password.
         </p>
       </div>
 
@@ -21,42 +21,26 @@ export default function Login() {
           type="email"
           placeholder="Email Address"
           className="input"
+          required
         />
-
-        {/* Password */}
-        <input
-          type="password"
-          placeholder="Password"
-          className="input"
-        />
-
-        {/* Forgot password */}
-        <div className="flex justify-end">
-          <Link
-            to="/forgot-password"
-            className="text-sm text-[#28AEBD] hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
 
         {/* Submit */}
         <button
           type="submit"
           className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
         >
-          Log In
+          Send Reset Link
         </button>
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">
           <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400">OR LOG IN WITH</span>
+          <span className="text-xs text-gray-400">OR</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         {/* Google */}
-       <button
+         <button
   type="button"
   className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 transition duration-200"
 >
@@ -67,9 +51,9 @@ export default function Login() {
 
       {/* Footer */}
       <p className="text-center text-sm text-gray-500 mt-6">
-        Don’t have an account?{" "}
-        <Link to="/register" className="text-[#28AEBD] hover:underline">
-          Sign up
+        Remembered your password?{" "}
+        <Link to="/login" className="text-[#28AEBD] hover:underline">
+          Log in
         </Link>
       </p>
     </div>

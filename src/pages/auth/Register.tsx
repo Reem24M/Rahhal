@@ -1,9 +1,7 @@
-import React from 'react'
-
+import RegisterForm from '../../features/auth/components/RegisterForm.tsx';
 export default function Register() {
   return (
-    <div>
-      this is register page
-    </div>
+    
+      <RegisterForm />
   )
 }

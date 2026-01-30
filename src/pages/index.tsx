@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 // Auth Pages
 import Login from './auth/Login';
 import Register from './auth/Register';
-
+import ForgetPassword from './auth/ForgetPassword';
 // Profile Pages
 import ProfilePage from './profile/profile';
 
@@ -34,6 +34,7 @@ const Pages = () => {
                     <Route element={<AuthLayout />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgetPassword />} />
                     </Route>
 
                 <Route element={<MainLayout />}>
