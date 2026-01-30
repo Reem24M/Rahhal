@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ForgetPassword from './auth/ForgetPassword';
+import ResetPassword from './auth/ResetPssword'
 // Profile Pages
 import ProfilePage from './profile/profile';
 
@@ -35,6 +36,7 @@ const Pages = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/forgot-password" element={<ForgetPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     </Route>
 
                 <Route element={<MainLayout />}>

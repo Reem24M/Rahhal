@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   return (
     <div>
       {/* Header */}
@@ -25,12 +27,20 @@ export default function ForgotPassword() {
         />
 
         {/* Submit */}
-        <button
+        {/* <button
           type="submit"
           className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
         >
           Send Reset Link
+        </button> */}
+        <button
+          type="button"
+          onClick={() => navigate("/reset-password")}
+          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
+        >
+          Send Reset Link
         </button>
+
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">
@@ -40,13 +50,13 @@ export default function ForgotPassword() {
         </div>
 
         {/* Google */}
-         <button
-  type="button"
-  className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 transition duration-200"
->
-  <FcGoogle size={24} />
-  <span className="text-gray-700 font-medium">Continue with Google</span>
-</button>
+        <button
+          type="button"
+          className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 transition duration-200"
+        >
+          <FcGoogle size={24} />
+          <span className="text-gray-700 font-medium">Continue with Google</span>
+        </button>
       </form>
 
       {/* Footer */}
