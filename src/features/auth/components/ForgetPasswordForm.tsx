@@ -35,8 +35,13 @@ export default function ForgotPassword() {
         </button> */}
         <button
           type="button"
+<<<<<<< HEAD
           onClick={() => navigate("/reset-password")}
           className="w-full bg-primary-600 hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
+=======
+          onClick={() => navigate("/verify-email")}
+          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
+>>>>>>> e544b0f6812eb08a2001fcf7bb7a164f293b73f3
         >
           Send Reset Link
         </button>
