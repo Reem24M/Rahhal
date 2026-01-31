@@ -8,7 +8,7 @@ import ResetPassword from './auth/ResetPssword'
 import ChangePassword from './auth/ChangePassword'
 import VerifyEmail from './auth/VerifyEmail';
 // Profile Pages
-import ProfilePage from './profile/profile';
+import ProfilePage from './profile/ProfilePage';
 
 // Feed Pages
 import HomeFeed from './feed/HomeFeed';
@@ -27,6 +27,8 @@ import NotFound from './NotFound/notfound';
 import MainLayout from '../layouts/mainLayout';
 import AuthLayout from '../layouts/AuthLayout';
 
+// setting
+import SettingPage from './settings/settingpage';
 const Pages = () => {
     const isAuthenticated = true; 
 
@@ -64,6 +66,10 @@ const Pages = () => {
                     <Route
                         path="/chat"
                         element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/settings"
+                        element={isAuthenticated ? <SettingPage /> : <Navigate to="/login" />}
                     />
 
                     {/* Home / Default */}
