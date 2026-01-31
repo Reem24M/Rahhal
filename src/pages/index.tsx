@@ -40,7 +40,7 @@ const Pages = () => {
                     <Route path="/forgot-password" element={<ForgetPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/change-password" element={<ChangePassword />} />
-                    <Route path="/veirfy-email" element={<VerifyEmail />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
                     </Route>
 
                 <Route element={<MainLayout />}>
