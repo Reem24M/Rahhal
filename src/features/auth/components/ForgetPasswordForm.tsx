@@ -28,7 +28,7 @@ function ForgotPassword() {
       onSuccess: () => {
         navigate({
           pathname: "/verify-email",
-          search: `?type=forget-password&email=${payload.email}`,
+          search: "?type=forget-password",
         });
         toast.success("please confirm your email");
       },

@@ -22,13 +22,14 @@ function VerifyEmailForm() {
 
   function onSubmit(payload: TVerifyType) {
     const type = searchParams.get("type");
-    const email = searchParams.get("email");
+
     verifyEmail(payload, {
       onSuccess: (data) => {
         toast.success(data?.data?.message);
         navigate({
           pathname: type == "sign-up" ? "/login" : "/reset-password",
-          search: `?email=${email}`,
+          search:
+            type === "forget-password" ? `?email=${data?.data?.email}` : "",
         });
       },
       onError: (error) => toast.error(error?.message),
