@@ -1,4 +1,4 @@
-import Button from "../../../shared/components/Button";
+import Button from "../../../shared/components/button";
 import type { Profile } from "../types/profile.types";
 import Image from "../../../../public/avater.png";
 import { IoSettingsOutline } from "react-icons/io5";

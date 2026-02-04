@@ -1,7 +1,9 @@
-import ChangePasswordForm from '../../features/auth/components/ChangePasswordForm';
-
-export default function ChangePassword() {
+function ChangePassword() {
   return (
-    <ChangePasswordForm />
+    <div>
+      
+    </div>
   )
 }
+
+export default ChangePassword
