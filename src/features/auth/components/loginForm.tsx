@@ -1,82 +1,86 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { Link, useNavigate } from "react-router";
+import Button from "../../../shared/components/Button.tsx";
+import Input from "../../../shared/components/Input";
+import PasswordInput from "../../../shared/components/PasswordInput";
+import { useForm } from "react-hook-form";
+import {
+  loginSchema,
+  type TLoginInputsType,
+} from "../validation/loginSchema.ts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "../hooks/useLogin.ts";
+import toast from "react-hot-toast";
 
-export default function Login() {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+function LoginForm() {
+  const { isPending, login } = useLogin();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<TLoginInputsType>({
+    mode: "onBlur",
+    resolver: zodResolver(loginSchema),
+    shouldFocusError: true,
+  });
 
+  function onSubmit(payload: TLoginInputsType) {
+    login(payload, {
+      onSuccess: (data) => {
+        toast.success(data?.message || "welcome in your rahhal account");
+        navigate("/feed");
+      },
+      onError: (error) => toast.error(error?.message),
+      onSettled: () => reset(),
+    });
+  }
+  const isWaiting: boolean = isSubmitting || isPending;
   return (
-    <div>
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900">Welcome Back</h2>
-        <p className="text-sm text-gray-500 mt-1">Log in to continue your journey.</p>
-      </div>
+    <div className="box px-4 py-8 sm:px-8 sm:py-10 gap-6">
+      <h1 className="text-center text-2xl font-semibold text-gray-800">
+        Login to your profile
+      </h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <Input
+          label="Email or Username"
+          id="username"
+          placeholder="username or email"
+          {...register("email")}
+          error={errors.email?.message}
+        />
 
-      {/* Form */}
-      <form className="space-y-4">
-        {/* Email */}
-        <input type="email" placeholder="Email Address" className="input w-full border rounded px-3 py-2" />
+        <PasswordInput
+          label="Password"
+          id="password"
+          placeholder="Password"
+          {...register("password")}
+          error={errors.password?.message}
+        />
 
-        {/* Password */}
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="input pr-10 w-full border rounded px-3 py-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <span
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
-          </span>
-        </div>
-
-        {/* Forgot password */}
-        <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-sm text-[#28AEBD] hover:underline">
-            Forgot password?
-          </Link>
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
+        <Link
+          to="/forget-password"
+          className="self-end text-sm font-medium text-primary-600 hover:underline"
         >
-          Log In
-        </button>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400">OR LOG IN WITH</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
-
-        {/* Google */}
-        <button
-          type="button"
-          className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 transition duration-200"
-        >
-          <FcGoogle size={24} />
-          <span className="text-gray-700 font-medium">Continue with Google</span>
-        </button>
-      </form>
-
-      {/* Footer */}
-      <p className="text-center text-sm text-gray-500 mt-6">
-        Don’t have an account?{" "}
-        <Link to="/register" className="text-[#28AEBD] hover:underline">
-          Sign up
+          Forgot password?
         </Link>
-      </p>
+
+        <Button disabled={isWaiting} loading={isWaiting}>
+          Login
+        </Button>
+
+        <p className="text-center text-sm text-gray-600">
+          Don’t have an account?
+          <Link
+            to="/sign-up"
+            className="font-medium text-primary-700 hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }
 
+export default LoginForm;

@@ -1,55 +1,81 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import Button from "../../../shared/components/Button";
+import OtpInput from "./OtpInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { verifySchema, type TVerifyType } from "../validation/verifySchema";
+import { useVerifyEmail } from "../hooks/useVerifyEmail";
+import toast from "react-hot-toast";
+import { useNavigate, useSearchParams } from "react-router";
 
-export default function VerifyEmail() {
+function VerifyEmailForm() {
+  const { isPending, verifyEmail } = useVerifyEmail();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const {
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<TVerifyType>({
+    resolver: zodResolver(verifySchema),
+  });
 
+  function onSubmit(payload: TVerifyType) {
+    const type = searchParams.get("type");
+    const email = searchParams.get("email");
+    verifyEmail(payload, {
+      onSuccess: (data) => {
+        toast.success(data?.data?.message);
+        navigate({
+          pathname: type == "sign-up" ? "/login" : "/reset-password",
+          search: `?email=${email}`,
+        });
+      },
+      onError: (error) => toast.error(error?.message),
+      onSettled: () => reset(),
+    });
+  }
+
+  const isWaiting = isSubmitting || isPending;
   return (
-    <div>
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Enter verification code
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Enter the 6-digit code sent to your email.
+    <div className="box px-4 py-8 sm:px-8 sm:py-10 gap-10">
+      <div className="flex flex-col gap-3">
+        <h1 className="text-center text-2xl font-semibold text-gray-800">
+          Verify your email
+        </h1>
+        <p className="text-center text-sm text-gray-600">
+          Enter the 6-digit code we sent to your email.
         </p>
       </div>
 
-      {/* OTP Inputs */}
-      <div className="flex justify-center gap-3 mb-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <input
-            key={i}
-            type="text"
-            maxLength={1}
-            className="w-12 h-12 text-center text-lg font-semibold border border-gray-300 rounded-xl focus:outline-none focus:border-[#28AEBD]"
-          />
-        ))}
-      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <OtpInput
+          length={6}
+          onComplete={(otp) => setValue("otp", otp, { shouldValidate: true })}
+        />
 
-      {/* Verify Button */}
-      <button
-        type="button"
-        onClick={() => navigate("/reset-password")}
-        className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
-      >
-        Verify
-      </button>
+        {errors.otp && (
+          <p className="text-sm text-red-600 text-center">
+            {errors.otp.message}
+          </p>
+        )}
 
-      {/* Footer */}
-      <p className="text-center text-sm text-gray-500 mt-6">
-        Didn’t get the code?{" "}
-        <button className="text-[#28AEBD] hover:underline font-medium">
-          Resend
-        </button>
-      </p>
+        <Button disabled={isWaiting} loading={isWaiting}>
+          Verify email
+        </Button>
 
-      <p className="text-center text-sm text-gray-500 mt-2">
-        Back to{" "}
-        <Link to="/login" className="text-[#28AEBD] hover:underline">
-          Log in
-        </Link>
-      </p>
+        <p className="text-center text-sm text-gray-600">
+          Didn’t receive the code?{" "}
+          <button
+            type="button"
+            className="font-medium text-primary-700 hover:underline cursor-pointer"
+          >
+            Resend
+          </button>
+        </p>
+      </form>
     </div>
   );
 }
+
+export default VerifyEmailForm;

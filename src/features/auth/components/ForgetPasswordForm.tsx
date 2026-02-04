@@ -1,76 +1,78 @@
-import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
+import Button from "../../../shared/components/Button";
+import Input from "../../../shared/components/Input";
+import { useForm } from "react-hook-form";
+import {
+  forgetPasswordSchema,
+  type TForgetPasswordType,
+} from "../validation/forgetPasswordSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForgetPassword } from "../hooks/useForgetPassword";
+import toast from "react-hot-toast";
 
-export default function ForgotPassword() {
+function ForgotPassword() {
+  const { isPending, forgetPassword } = useForgetPassword();
   const navigate = useNavigate();
+
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    reset,
+  } = useForm<TForgetPasswordType>({
+    mode: "onBlur",
+    resolver: zodResolver(forgetPasswordSchema),
+  });
+  function onSubmit(payload: TForgetPasswordType) {
+    forgetPassword(payload, {
+      onSuccess: () => {
+        navigate({
+          pathname: "/verify-email",
+          search: `?type=forget-password&email=${payload.email}`,
+        });
+        toast.success("please confirm your email");
+      },
+      onError: (error) => toast.error(error?.message),
+      onSettled: () => reset(),
+    });
+  }
+  const isWaiting = isSubmitting || isPending;
   return (
-    <div>
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900">
-          Forgot Password
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Enter your email address to reset your password.
+    <div className="box px-4 py-8 sm:px-8 sm:py-10 gap-7">
+      <div className="flex flex-col gap-3">
+        <h1 className="text-center text-2xl font-semibold text-gray-800">
+          Forgot your password?
+        </h1>
+        <p className="text-center text-sm text-gray-600">
+          Enter your email and we’ll send you a verification code.
         </p>
       </div>
-
-      {/* Form */}
-      <form className="space-y-4">
-        {/* Email */}
-        <input
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <Input
+          label="Email"
+          id="email"
           type="email"
-          placeholder="Email Address"
-          className="input"
-          required
+          placeholder="example@email.com"
+          {...register("email")}
+          error={errors.email?.message}
         />
 
-        {/* Submit */}
-        {/* <button
-          type="submit"
-          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
-        >
-          Send Reset Link
-        </button> */}
-        <button
-          type="button"
-<<<<<<< HEAD
-          onClick={() => navigate("/reset-password")}
-          className="w-full bg-primary-600 hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
-=======
-          onClick={() => navigate("/verify-email")}
-          className="w-full bg-[#28AEBD] hover:bg-[#1F96A3] text-white font-medium py-3 rounded-full transition"
->>>>>>> e544b0f6812eb08a2001fcf7bb7a164f293b73f3
-        >
-          Send Reset Link
-        </button>
+        <Button disabled={isWaiting} loading={isWaiting}>
+          Send code
+        </Button>
 
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400">OR</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
-
-        {/* Google */}
-        <button
-          type="button"
-          className="w-full border border-gray-200 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 transition duration-200"
-        >
-          <FcGoogle size={24} />
-          <span className="text-gray-700 font-medium">Continue with Google</span>
-        </button>
+        <p className="text-center text-sm text-gray-600">
+          Remember your password?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-primary-700 hover:underline"
+          >
+            Back to login
+          </Link>
+        </p>
       </form>
-
-      {/* Footer */}
-      <p className="text-center text-sm text-gray-500 mt-6">
-        Remembered your password?{" "}
-        <Link to="/login" className="text-[#28AEBD] hover:underline">
-          Log in
-        </Link>
-      </p>
     </div>
   );
 }
+
+export default ForgotPassword;

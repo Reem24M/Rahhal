@@ -1,89 +1,90 @@
-import { useState } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { Link, useNavigate, useSearchParams } from "react-router";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Button from "../../../shared/components/Button";
+import PasswordInput from "../../../shared/components/PasswordInput";
+import {
+  resetPasswordSchema,
+  type TResetInputsType,
+} from "../validation/resetPasswordSchema";
+import { useResetPassword } from "../hooks/useResetPassword";
 
-export default function ResetPassword() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const isMinLength = password.length >= 8;
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  const isMatch = password === confirmPassword && confirmPassword !== "";
-
-  const isValid = isMinLength && hasSpecialChar && isMatch;
-
+function ResetPasswordForm() {
+  const { isPending, resetPassword } = useResetPassword();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<TResetInputsType>({
+    mode: "onChange",
+    resolver: zodResolver(resetPasswordSchema),
+    shouldFocusError: true,
+  });
+  function onSubmit(data: TResetInputsType) {
+    const payload = {
+      ...data,
+      email: searchParams.get("email") || "",
+    };
+    resetPassword(payload, {
+      onSuccess: (data) => {
+        toast.success(data?.data?.message);
+        navigate({
+          pathname: "/login",
+          search: "",
+        });
+      },
+      onError: (error) => toast.error(error?.message),
+      // onSettled: () => reset(),
+    });
+  }
+  const isWaiting: boolean = isSubmitting || isPending;
   return (
-    <div className="max-w-md mx-auto p-6">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900">Reset Password</h2>
-        <p className="text-sm text-gray-500 mt-1">
+    <div className="box px-4 py-8 sm:px-8 sm:py-10 gap-6">
+      <div className="flex flex-col gap-3">
+        <h1 className="text-center text-2xl font-semibold text-gray-800">
+          Create a new password
+        </h1>
+
+        <p className="text-center text-sm text-gray-600">
           Your new password must be different from previously used passwords.
         </p>
       </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <PasswordInput
+          label="New password"
+          id="new-password"
+          placeholder="Enter new password"
+          {...register("newPassword")}
+          error={errors.newPassword?.message}
+        />
 
-      {/* Form */}
-      <form className="space-y-4">
-        {/* New Password */}
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="New Password"
-            className="input pr-10 w-full border rounded px-3 py-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <span
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
-            onClick={() => setShowPassword(!showPassword)}
+        <PasswordInput
+          label="Confirm password"
+          id="confirm-password"
+          placeholder="Confirm new password"
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
+        />
+
+        <Button disabled={isWaiting} loading={isWaiting}>
+          Reset password
+        </Button>
+
+        <p className="text-center text-sm text-gray-600">
+          Remembered your password?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-primary-700 hover:underline"
           >
-            {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
-          </span>
-        </div>
-
-        {/* Confirm Password */}
-        <div className="relative">
-          <input
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm Password"
-            className="input pr-10 w-full border rounded px-3 py-2"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <span
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            {showConfirmPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
-          </span>
-        </div>
-
-        {/* Rules */}
-        <div className="text-sm space-y-1">
-          <p className={isMinLength ? "text-[#28AEBD]" : "text-gray-400"}>
-            ✓ Must be at least 8 characters
-          </p>
-          <p className={hasSpecialChar ? "text-[#28AEBD]" : "text-gray-400"}>
-            ✓ Must contain one special character
-          </p>
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={!isValid}
-          className={`w-full font-medium py-3 rounded-full transition
-            ${isValid
-              ? "bg-[#28AEBD] hover:bg-[#1F96A3] text-white"
-              : "bg-gray-300 text-white cursor-not-allowed"
-            }`}
-        >
-          Reset Password
-        </button>
+            Back to login
+          </Link>
+        </p>
       </form>
     </div>
   );
 }
 
-
+export default ResetPasswordForm;
