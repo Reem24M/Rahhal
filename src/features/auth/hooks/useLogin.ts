@@ -12,7 +12,7 @@ export function useLogin() {
   } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      console.log(data?.data?.tokenل);
+      console.log(data?.data?.token);
       setToken(data?.data?.token);
     },
   });
