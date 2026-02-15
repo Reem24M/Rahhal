@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import Button from "../../../shared/components/Button";
+import Button from "../../../shared/components/button.tsx";
 import Input from "../../../shared/components/Input";
 import { useForm } from "react-hook-form";
 import {
